@@ -217,7 +217,7 @@ class HandleConnection(ssl_dispatcher):
                     encoder.encode(pcm)
                         
                 elif reqObject['class'] == 'StartCorrectedSpeechRequest':
-                    self.process_recognized_speech({u'hypotheses': [{'confidence': 1.0, 'utterance': str.lower(reqObject['properties']['utterance'])}]}, reqObject['aceId'], False)
+                    self.process_recognized_speech({u'hypotheses': [{'confidence': 1.0, 'utterance': reqObject['properties']['utterance']}]}, reqObject['aceId'], False)
             
                 elif reqObject['class'] == 'FinishSpeech':
                     (decoder, encoder, dictation) = self.speech[reqObject['refId']]
@@ -271,7 +271,8 @@ class HandleConnection(ssl_dispatcher):
                         objProperties = reqObject['properties'] 
                         self.assistant.censorSpeech = objProperties['censorSpeech']
                         self.assistant.timeZoneId = objProperties['timeZoneId']
-                        self.assistant.language = objProperties['language']
+			self.assistant.language = 'ko-KR'
+                        #self.assistant.language = objProperties['language']
                         self.assistant.region = objProperties['region']
                         c.execute("update assistants set assistant = ? where assistantId = ?", (self.assistant, self.assistant.assistantId))
                         self.dbConnection.commit()
